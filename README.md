@@ -2,7 +2,8 @@
 Injects endpoints and headers into a GraphQL Config instance based on a given graphcool.yml
 
 ## Usage
-```
+
+```ts
 import {patchEndpointsToConfig} from 'graphql-config-extension-graphcool'
 import {getGraphQLConfig} from 'graphql-config'
 
