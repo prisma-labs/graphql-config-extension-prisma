@@ -5,8 +5,8 @@ Injects endpoints and headers into a GraphQL Config instance based on a given gr
 
 ```ts
 import {patchEndpointsToConfig} from 'graphql-config-extension-graphcool'
-import {getGraphQLConfig} from 'graphql-config'
+import {getGraphQLConfig, GraphQLConfigData} from 'graphql-config'
 
-const config = getGraphQLConfig().config
-const patchedConfig = patchEndpointsToConfig(config, process.cwd())
+const config: GraphQLConfigData = getGraphQLConfig().config
+const patchedConfig: GraphQLConfigData = patchEndpointsToConfig(config, process.cwd())
 ```
