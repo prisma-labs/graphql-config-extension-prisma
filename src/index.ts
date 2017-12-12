@@ -8,6 +8,7 @@ import * as path from 'path'
 export async function patchEndpointsToConfig(
   config: GraphQLConfigData,
   cwd?: string,
+  envVars?: any,
 ): Promise<GraphQLConfigData> {
   // let the show begin ...
   let newConfig = { ...config }
@@ -27,7 +28,12 @@ export async function patchEndpointsToConfig(
           set(
             newConfig,
             ['projects', projectName, 'extensions', 'endpoints'],
-            await getEndpointsFromPath(env, project.extensions.graphcool, cwd),
+            await getEndpointsFromPath(
+              env,
+              project.extensions.graphcool,
+              cwd,
+              envVars,
+            ),
           )
         }
       }),
@@ -41,9 +47,10 @@ async function getEndpointsFromPath(
   env: Environment,
   ymlPath: string,
   cwd?: string,
+  envVars?: any,
 ) {
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
-  const definition = new GraphcoolDefinitionClass(env, joinedYmlPath)
+  const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
   return Object.keys(definition.rawStages)
     .filter(s => s !== 'default')
