@@ -1,6 +1,6 @@
 {
   "name": "graphql-config-extension-graphcool",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -8,7 +8,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "graphcool-yml": "^0.0.2",
+    "graphcool-yml": "^0.0.6",
     "graphql-config": "^1.1.0"
   },
   "devDependencies": {
