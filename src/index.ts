@@ -1,6 +1,10 @@
 import { GraphQLConfigData, GraphQLConfigEnpointsData } from 'graphql-config'
 import { GraphQLProjectConfig } from 'graphql-config/lib/GraphQLProjectConfig'
-import { GraphcoolDefinitionClass, Environment } from 'graphcool-yml'
+import {
+  GraphcoolDefinitionClass,
+  Environment,
+  ClusterCache,
+} from 'graphcool-yml'
 import { merge, set } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
@@ -12,11 +16,21 @@ export async function patchEndpointsToConfig(
 ): Promise<GraphQLConfigData> {
   // let the show begin ...
   let newConfig = { ...config }
-  const env = new Environment(path.join(os.homedir(), '.graphcoolrc'))
+  const home = os.homedir()
+  const globalGraphcoolPath = path.join(home, '.graphcool/')
+  const globalConfigPath = path.join(home, '.graphcool/config.yml')
+  const globalClusterCachePath = path.join(home, '.graphcool/cache.yml')
+  const env = new Environment(globalConfigPath)
+  const cache = new ClusterCache(globalClusterCachePath)
   await env.load({})
   if (newConfig.extensions && newConfig.extensions.graphcool) {
     newConfig = merge(
-      await getEndpointsFromPath(env, newConfig.extensions.graphcool, cwd),
+      await getEndpointsFromPath(
+        env,
+        newConfig.extensions.graphcool,
+        cache,
+        cwd,
+      ),
     )
   }
 
@@ -31,6 +45,7 @@ export async function patchEndpointsToConfig(
             await getEndpointsFromPath(
               env,
               project.extensions.graphcool,
+              cache,
               cwd,
               envVars,
             ),
@@ -46,40 +61,40 @@ export async function patchEndpointsToConfig(
 async function getEndpointsFromPath(
   env: Environment,
   ymlPath: string,
+  cache: ClusterCache,
   cwd?: string,
   envVars?: any,
 ) {
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
   const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
-  return Object.keys(definition.rawStages)
-    .filter(s => s !== 'default')
-    .reduce((acc, stageName) => {
-      const value = definition.rawStages[stageName]
-      const cluster = env.clusterByName(value)
-      if (cluster) {
-        const url = cluster.getApiEndpoint(
-          definition.definition!.service!,
-          stageName,
-        )
-        const token = definition.getToken(
-          definition.definition!.service,
-          stageName,
-        )
-        const headers = token
-          ? {
-              Authorization: `Bearer ${token}`,
-            }
-          : undefined
-        return {
-          ...acc,
-          [stageName]: {
-            url,
-            headers,
-          },
-        }
+  const serviceName = definition.definition!.service
+  const entries = cache.getEntriesByService(serviceName)
+  return entries.reduce((acc, entry) => {
+    const cluster = env.clusterByName(entry.cluster)
+    if (cluster) {
+      const url = cluster.getApiEndpoint(
+        definition.definition!.service!,
+        entry.stage,
+      )
+      const token = definition.getToken(
+        definition.definition!.service,
+        entry.stage,
+      )
+      const headers = token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : undefined
+      return {
+        ...acc,
+        [entry.stage]: {
+          url,
+          headers,
+        },
       }
+    }
 
-      return acc
-    }, {})
+    return acc
+  }, {})
 }
