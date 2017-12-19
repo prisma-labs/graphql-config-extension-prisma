@@ -18,3 +18,6 @@ import {getGraphQLConfig, GraphQLConfigData} from 'graphql-config'
 const config: GraphQLConfigData = getGraphQLConfig().config
 const patchedConfig: GraphQLConfigData = patchEndpointsToConfig(config, process.cwd())
 ```
+
+## Current Usages
+This is currently being used in the [graphql-playground-html](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html) and [graphql-playgorund-electron](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-electron).
