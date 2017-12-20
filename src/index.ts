@@ -30,6 +30,7 @@ export async function patchEndpointsToConfig(
         newConfig.extensions.graphcool,
         cache,
         cwd,
+        envVars,
       ),
     )
   }
