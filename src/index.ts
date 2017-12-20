@@ -69,7 +69,10 @@ async function getEndpointsFromPath(
   const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
   const serviceName = definition.definition!.service
-  const entries = cache.getEntriesByService(serviceName)
+  let entries = cache.getEntriesByService(serviceName)
+  if (envVars && envVars.GRAPHCOOL_STAGE) {
+    entries = entries.filter(entry => entry.stage === envVars.GRAPHCOOL_STAGE)
+  }
   return entries.reduce((acc, entry) => {
     const cluster = env.clusterByName(entry.cluster)
     if (cluster) {
