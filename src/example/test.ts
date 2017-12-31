@@ -1,4 +1,4 @@
-import { patchEndpointsToConfig } from '../index'
+import { patchEndpointsToConfigData } from '../index'
 
 async function run() {
   const config = {
@@ -11,7 +11,7 @@ async function run() {
     },
   } as any
 
-  const newConfig = await patchEndpointsToConfig(config, process.cwd())
+  const newConfig = await patchEndpointsToConfigData(config, process.cwd())
 
   console.log(JSON.stringify(newConfig, null, 2))
 }

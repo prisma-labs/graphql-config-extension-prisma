@@ -1,28 +1,55 @@
-import { GraphQLConfigData } from 'graphql-config'
+import {
+  GraphQLConfig,
+  GraphQLConfigData,
+  GraphQLConfigEnpointsData,
+} from 'graphql-config'
 import {
   GraphcoolDefinitionClass,
   Environment,
   ClusterCache,
 } from 'graphcool-yml'
-import { merge, set } from 'lodash'
+import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
 
 export async function patchEndpointsToConfig(
+  config: GraphQLConfig,
+  cwd?: string,
+  envVars?: { [key: string]: any },
+): Promise<GraphQLConfig> {
+  config.config = await patchEndpointsToConfigData(config.config, cwd, envVars)
+  return config
+}
+
+export async function patchEndpointsToConfigData(
   config: GraphQLConfigData,
   cwd?: string,
-  envVars?: any,
+  envVars?: { [key: string]: any },
 ): Promise<GraphQLConfigData> {
-  // let the show begin ...
-  let newConfig = { ...config }
+  // return early if no graphcool extension found
+  const allExtensions = [
+    config.extensions,
+    ...values(config.projects).map(p => p.extensions),
+  ]
+  if (!allExtensions.some(e => e && e.graphcool)) {
+    return config
+  }
+
+  const newConfig = { ...config }
+
   const home = os.homedir()
-  const globalConfigPath = path.join(home, '.graphcool/config.yml')
+
   const globalClusterCachePath = path.join(home, '.graphcool/cache.yml')
-  const env = new Environment(globalConfigPath)
   const cache = new ClusterCache(globalClusterCachePath)
+
+  const globalConfigPath = path.join(home, '.graphcool/config.yml')
+  const env = new Environment(globalConfigPath)
   await env.load({})
+
   if (newConfig.extensions && newConfig.extensions.graphcool) {
-    newConfig = merge(
+    set(
+      newConfig,
+      ['extensions', 'endpoints'],
       await getEndpointsFromPath(
         env,
         newConfig.extensions.graphcool,
@@ -62,8 +89,8 @@ async function getEndpointsFromPath(
   ymlPath: string,
   cache: ClusterCache,
   cwd?: string,
-  envVars?: any,
-) {
+  envVars?: { [key: string]: any },
+): Promise<GraphQLConfigEnpointsData> {
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
   const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
@@ -88,6 +115,7 @@ async function getEndpointsFromPath(
             Authorization: `Bearer ${token}`,
           }
         : undefined
+
       return {
         ...acc,
         [entry.stage]: {
