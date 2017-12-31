@@ -13,11 +13,10 @@
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
-    "jest": "^22.0.4",
     "typescript": "^2.6.2"
   },
   "scripts": {
-    "test": "jest",
+    "test": "cd dist/example && cp ../../src/example/{db.graphql,graphcool.yml} . && node test.js",
     "prepare": "npm run build",
     "build": "tsc -d"
   },

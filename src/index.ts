@@ -1,5 +1,4 @@
-import { GraphQLConfigData, GraphQLConfigEnpointsData } from 'graphql-config'
-import { GraphQLProjectConfig } from 'graphql-config/lib/GraphQLProjectConfig'
+import { GraphQLConfigData } from 'graphql-config'
 import {
   GraphcoolDefinitionClass,
   Environment,
@@ -17,7 +16,6 @@ export async function patchEndpointsToConfig(
   // let the show begin ...
   let newConfig = { ...config }
   const home = os.homedir()
-  const globalGraphcoolPath = path.join(home, '.graphcool/')
   const globalConfigPath = path.join(home, '.graphcool/config.yml')
   const globalClusterCachePath = path.join(home, '.graphcool/cache.yml')
   const env = new Environment(globalConfigPath)
