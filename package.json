@@ -16,7 +16,7 @@
     "typescript": "^2.6.2"
   },
   "scripts": {
-    "test": "cd dist/example && cp ../../src/example/{db.graphql,graphcool.yml} . && node test.js",
+    "test": "npm run build && cd dist/example && cp ../../src/example/{db.graphql,graphcool.yml} . && node test.js",
     "prepare": "npm run build",
     "build": "tsc -d"
   },
