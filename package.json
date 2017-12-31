@@ -3,14 +3,18 @@
   "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "graphcool-yml": "^0.1.7",
     "graphql-config": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^8.5.2"
+    "@types/node": "^8.5.2",
+    "jest": "^22.0.4",
+    "typescript": "^2.6.2"
   },
   "scripts": {
     "test": "jest",
