@@ -13,12 +13,13 @@
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
+    "ts-node": "^4.1.0",
     "typescript": "^2.6.2"
   },
   "scripts": {
-    "test": "npm run build && cd dist/example && cp ../../src/example/{db.graphql,graphcool.yml} . && node test.js",
+    "test": "cd src/example && ts-node test.ts",
     "prepare": "npm run build",
-    "build": "tsc -d"
+    "build": "rm -rf dist && tsc -d"
   },
   "repository": {
     "type": "git",
