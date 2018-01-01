@@ -12,9 +12,9 @@
     "graphql-config": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^8.5.2",
-    "ts-node": "^4.1.0",
-    "typescript": "^2.6.2"
+    "@types/node": "8.5.2",
+    "ts-node": "4.1.0",
+    "typescript": "2.6.2"
   },
   "scripts": {
     "test": "cd src/example && ts-node test.ts",
