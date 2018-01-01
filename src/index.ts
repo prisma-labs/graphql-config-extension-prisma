@@ -2,6 +2,7 @@ import {
   GraphQLConfig,
   GraphQLConfigData,
   GraphQLConfigEnpointsData,
+  GraphQLProjectConfig,
 } from 'graphql-config'
 import {
   GraphcoolDefinitionClass,
@@ -12,11 +13,9 @@ import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
 
-export async function patchEndpointsToConfig(
-  config: GraphQLConfig,
-  cwd?: string,
-  envVars?: { [key: string]: any },
-): Promise<GraphQLConfig> {
+export async function patchEndpointsToConfig<
+  T extends GraphQLConfig | GraphQLProjectConfig
+>(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
   config.config = await patchEndpointsToConfigData(config.config, cwd, envVars)
   return config
 }
