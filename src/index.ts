@@ -4,11 +4,7 @@ import {
   GraphQLConfigEnpointsData,
   GraphQLProjectConfig,
 } from 'graphql-config'
-import {
-  GraphcoolDefinitionClass,
-  Environment,
-  ClusterCache,
-} from 'graphcool-yml'
+import { GraphcoolDefinitionClass, Environment } from 'graphcool-yml'
 import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
@@ -38,11 +34,7 @@ export async function patchEndpointsToConfigData(
 
   const home = os.homedir()
 
-  const globalClusterCachePath = path.join(home, '.graphcool/cache.yml')
-  const cache = new ClusterCache(globalClusterCachePath)
-
-  const globalConfigPath = path.join(home, '.graphcool/config.yml')
-  const env = new Environment(globalConfigPath)
+  const env = new Environment(home)
   await env.load({})
 
   if (newConfig.extensions && newConfig.extensions.graphcool) {
@@ -52,7 +44,6 @@ export async function patchEndpointsToConfigData(
       await getEndpointsFromPath(
         env,
         newConfig.extensions.graphcool,
-        cache,
         cwd,
         envVars,
       ),
@@ -70,7 +61,6 @@ export async function patchEndpointsToConfigData(
             await getEndpointsFromPath(
               env,
               project.extensions.graphcool,
-              cache,
               cwd,
               envVars,
             ),
@@ -86,7 +76,6 @@ export async function patchEndpointsToConfigData(
 async function getEndpointsFromPath(
   env: Environment,
   ymlPath: string,
-  cache: ClusterCache,
   cwd?: string,
   envVars?: { [key: string]: any },
 ): Promise<GraphQLConfigEnpointsData> {
@@ -94,36 +83,24 @@ async function getEndpointsFromPath(
   const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
   const serviceName = definition.definition!.service
-  let entries = cache.getEntriesByService(serviceName)
-  if (envVars && envVars.GRAPHCOOL_STAGE) {
-    entries = entries.filter(entry => entry.stage === envVars.GRAPHCOOL_STAGE)
+  const stage = definition.definition!.stage
+  const cluster = definition.getCluster()
+  if (!cluster) {
+    throw new Error(
+      `No cluster set. Please set the "cluster" property in your graphcool.yml`,
+    )
   }
-  return entries.reduce((acc, entry) => {
-    const cluster = env.clusterByName(entry.cluster)
-    if (cluster) {
-      const url = cluster.getApiEndpoint(
-        definition.definition!.service!,
-        entry.stage,
-      )
-      const token = definition.getToken(
-        definition.definition!.service,
-        entry.stage,
-      )
-      const headers = token
-        ? {
-            Authorization: `Bearer ${token}`,
-          }
-        : undefined
-
-      return {
-        ...acc,
-        [entry.stage]: {
-          url,
-          headers,
-        },
+  const url = cluster.getApiEndpoint(serviceName, stage)
+  const token = definition.getToken(serviceName, stage)
+  const headers = token
+    ? {
+        Authorization: `Bearer ${token}`,
       }
-    }
-
-    return acc
-  }, {})
+    : undefined
+  return {
+    [stage]: {
+      url,
+      headers,
+    },
+  }
 }

@@ -3,3 +3,7 @@ service: n
 datamodel: db.graphql
 
 disableAuth: true
+
+stage: dev
+
+cluster: shared-public-demo
