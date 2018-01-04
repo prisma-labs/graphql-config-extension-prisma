@@ -3,10 +3,12 @@
   "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
-    "graphcool-yml": "0.2.1",
+    "graphcool-yml": "0.2.2",
     "graphql-config": "^1.1.4"
   },
   "devDependencies": {
