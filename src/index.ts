@@ -84,10 +84,18 @@ async function getEndpointsFromPath(
   await definition.load({})
   const serviceName = definition.definition!.service
   const stage = definition.definition!.stage
+  const clusterName = definition.definition!.cluster
+  if (!clusterName) {
+    throw new Error(
+      `No cluster set. Please set the "cluster" property in your graphcool.yml`,
+    )
+  }
   const cluster = definition.getCluster()
   if (!cluster) {
     throw new Error(
-      `No cluster set. Please set the "cluster" property in your graphcool.yml`,
+      `Cluster ${clusterName} provided in graphcool.yml could not be found in global ~/.graphcoolrc.
+Please check in ~/.graphcoolrc under 'graphcool-1.0', if the cluster exists.
+You can use \`graphcool local start\` to start a new cluster.`,
     )
   }
   const url = cluster.getApiEndpoint(serviceName, stage)
