@@ -98,7 +98,7 @@ Please check in ~/.graphcoolrc under 'graphcool-1.0', if the cluster exists.
 You can use \`graphcool local start\` to start a new cluster.`,
     )
   }
-  const url = cluster.getApiEndpoint(serviceName, stage)
+  const url = cluster.getApiEndpoint(serviceName, stage, definition.getWorkspace() || undefined)
   const token = definition.getToken(serviceName, stage)
   const headers = token
     ? {
