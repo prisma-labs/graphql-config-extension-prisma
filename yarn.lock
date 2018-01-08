@@ -177,9 +177,9 @@ graphcool-json-schema@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.2.0.tgz#6c7a9de36a130c5048fa8d9817dff2b5a88bc226"
 
-graphcool-yml@0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.4.7.tgz#1d312e601bdc3352a12f5f891db5ea444ab26ebc"
+graphcool-yml@0.4.8:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.4.8.tgz#c1e70a88ccc8b8eea81fb80b7c369a2b734240b9"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"

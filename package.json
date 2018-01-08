@@ -8,7 +8,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "graphcool-yml": "0.4.7",
+    "graphcool-yml": "0.4.8",
     "graphql-config": "^1.1.4"
   },
   "devDependencies": {
