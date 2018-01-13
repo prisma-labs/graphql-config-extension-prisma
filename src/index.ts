@@ -4,7 +4,7 @@ import {
   GraphQLConfigEnpointsData,
   GraphQLProjectConfig,
 } from 'graphql-config'
-import { GraphcoolDefinitionClass, Environment } from 'graphcool-yml'
+import { PrismaDefinitionClass, Environment } from 'prisma-yml'
 import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
@@ -21,12 +21,12 @@ export async function patchEndpointsToConfigData(
   cwd?: string,
   envVars?: { [key: string]: any },
 ): Promise<GraphQLConfigData> {
-  // return early if no graphcool extension found
+  // return early if no prisma extension found
   const allExtensions = [
     config.extensions,
     ...values(config.projects).map(p => p.extensions),
   ]
-  if (!allExtensions.some(e => e && e.graphcool)) {
+  if (!allExtensions.some(e => e && e.prisma)) {
     return config
   }
 
@@ -37,13 +37,13 @@ export async function patchEndpointsToConfigData(
   const env = new Environment(home)
   await env.load({})
 
-  if (newConfig.extensions && newConfig.extensions.graphcool) {
+  if (newConfig.extensions && newConfig.extensions.prisma) {
     set(
       newConfig,
       ['extensions', 'endpoints'],
       await getEndpointsFromPath(
         env,
-        newConfig.extensions.graphcool,
+        newConfig.extensions.prisma,
         cwd,
         envVars,
       ),
@@ -54,13 +54,13 @@ export async function patchEndpointsToConfigData(
     await Promise.all(
       Object.keys(newConfig.projects).map(async projectName => {
         const project = newConfig.projects![projectName]
-        if (project.extensions && project.extensions.graphcool) {
+        if (project.extensions && project.extensions.prisma) {
           set(
             newConfig,
             ['projects', projectName, 'extensions', 'endpoints'],
             await getEndpointsFromPath(
               env,
-              project.extensions.graphcool,
+              project.extensions.prisma,
               cwd,
               envVars,
             ),
@@ -80,25 +80,29 @@ async function getEndpointsFromPath(
   envVars?: { [key: string]: any },
 ): Promise<GraphQLConfigEnpointsData> {
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
-  const definition = new GraphcoolDefinitionClass(env, joinedYmlPath, envVars)
+  const definition = new PrismaDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
   const serviceName = definition.definition!.service
   const stage = definition.definition!.stage
   const clusterName = definition.definition!.cluster
   if (!clusterName) {
     throw new Error(
-      `No cluster set. Please set the "cluster" property in your graphcool.yml`,
+      `No cluster set. Please set the "cluster" property in your prisma.yml`,
     )
   }
   const cluster = definition.getCluster()
   if (!cluster) {
     throw new Error(
-      `Cluster ${clusterName} provided in graphcool.yml could not be found in global ~/.graphcoolrc.
-Please check in ~/.graphcoolrc under 'graphcool-1.0', if the cluster exists.
-You can use \`graphcool local start\` to start a new cluster.`,
+      `Cluster ${clusterName} provided in prisma.yml could not be found in global ~/.prisma/config.yml.
+Please check in ~/.prisma/config.yml, if the cluster exists.
+You can use \`prisma local start\` to start a new cluster.`,
     )
   }
-  const url = cluster.getApiEndpoint(serviceName, stage, definition.getWorkspace() || undefined)
+  const url = cluster.getApiEndpoint(
+    serviceName,
+    stage,
+    definition.getWorkspace() || undefined,
+  )
   const token = definition.getToken(serviceName, stage)
   const headers = token
     ? {

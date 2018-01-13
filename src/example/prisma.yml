@@ -1,0 +1,9 @@
+service: n
+
+datamodel: db.graphql
+
+disableAuth: true
+
+stage: dev
+
+cluster: prisma-eu1

@@ -5,6 +5,7 @@ async function run() {
     projects: {
       database: {
         extensions: {
+          prisma: 'prisma.yml',
           graphcool: 'graphcool.yml',
         },
       },

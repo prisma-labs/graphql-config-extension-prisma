@@ -13,7 +13,7 @@ const config = {
     database: {
       schemaPath: 'src/generated/database.graphql',
       extensions: {
-        graphcool: 'graphcool.yml',
+        prisma: 'prisma.yml',
       },
     },
   },

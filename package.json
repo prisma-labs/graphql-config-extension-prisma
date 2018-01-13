@@ -1,6 +1,6 @@
 {
-  "name": "graphql-config-extension-graphcool",
-  "version": "0.0.0-semantic-release",
+  "name": "graphql-config-extension-prisma",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -8,8 +8,8 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "graphcool-yml": "0.4.8",
-    "graphql-config": "^1.1.4"
+    "graphql-config": "^1.1.4",
+    "prisma-yml": "0.0.2"
   },
   "devDependencies": {
     "@types/node": "8.5.7",
@@ -23,6 +23,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphcool/graphql-config-extension-graphcool.git"
+    "url": "https://github.com/graphcool/graphql-config-extension-prisma.git"
   }
 }
