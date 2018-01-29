@@ -393,12 +393,13 @@ prisma-json-schema@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.1.tgz#0802e156a293faefdf21e5e41beb8d3681f45cb1"
 
-prisma-yml@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-0.0.2.tgz#7f86e5fcb7dfe4a8cbf104a8b36ea9de69a9c0d3"
+prisma-yml@0.0.18:
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-0.0.18.tgz#38f987c5a87a4dc0aff843aaf8ab39ed10d7028b"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
+    chalk "^2.3.0"
     debug "^3.1.0"
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
