@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/node": "9.4.0",
     "ts-node": "4.1.0",
-    "typescript": "2.6.2"
+    "typescript": "2.7.1"
   },
   "scripts": {
     "test": "cd src/example && ts-node test.ts",
