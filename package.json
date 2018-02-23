@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "graphql-config": "^2.0.0",
-    "prisma-yml": "1.0.25"
+    "prisma-yml": "1.0.28"
   },
   "devDependencies": {
     "@types/node": "9.4.6",
