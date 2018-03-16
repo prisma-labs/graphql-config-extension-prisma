@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/node": "9.4.6",
-    "graphql": "0.13.1",
+    "graphql": "0.13.2",
     "ts-node": "5.0.0",
     "typescript": "2.7.2"
   },
