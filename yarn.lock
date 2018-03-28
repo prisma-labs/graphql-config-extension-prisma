@@ -164,7 +164,7 @@ graphql-request@^1.5.0:
   dependencies:
     cross-fetch "1.1.1"
 
-graphql@^0.13.1:
+graphql@0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.1.tgz#9b3db3d8e40d1827e4172404bfdd2e4e17a58b55"
   dependencies:
@@ -327,9 +327,9 @@ prisma-json-schema@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.1.tgz#0802e156a293faefdf21e5e41beb8d3681f45cb1"
 
-prisma-yml@1.0.28:
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.28.tgz#5dd9bb99353cf2fba5bb12880b25faaaf72b9f5e"
+prisma-yml@1.0.39:
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.39.tgz#c4f0d8896363f9effd4c76ef2eee82066dd907aa"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
