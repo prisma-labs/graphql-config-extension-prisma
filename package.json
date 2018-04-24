@@ -1,6 +1,6 @@
 {
   "name": "graphql-config-extension-prisma",
-  "version": "0.0.5",
+  "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
