@@ -1,9 +1,3 @@
-service: n
-
 datamodel: db.graphql
 
-disableAuth: true
-
-stage: dev
-
-cluster: prisma-eu1
+endpoint: https://eu1.prisma.sh/public-asd/n/dev

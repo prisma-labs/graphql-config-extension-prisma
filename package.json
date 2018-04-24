@@ -1,6 +1,6 @@
 {
   "name": "graphql-config-extension-prisma",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "graphql-config": "^2.0.1",
-    "prisma-yml": "1.0.28"
+    "prisma-yml": "1.0.47"
   },
   "devDependencies": {
     "@types/node": "9.4.6",

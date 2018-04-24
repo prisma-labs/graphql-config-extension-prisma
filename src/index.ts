@@ -82,9 +82,9 @@ async function getEndpointsFromPath(
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
   const definition = new PrismaDefinitionClass(env, joinedYmlPath, envVars)
   await definition.load({})
-  const serviceName = definition.definition!.service
-  const stage = definition.definition!.stage
-  const clusterName = definition.definition!.cluster
+  const serviceName = definition.service!
+  const stage = definition.stage!
+  const clusterName = definition.cluster
   if (!clusterName) {
     throw new Error(
       `No cluster set. Please set the "cluster" property in your prisma.yml`,
@@ -95,7 +95,7 @@ async function getEndpointsFromPath(
     throw new Error(
       `Cluster ${clusterName} provided in prisma.yml could not be found in global ~/.prisma/config.yml.
 Please check in ~/.prisma/config.yml, if the cluster exists.
-You can use \`prisma local start\` to start a new cluster.`,
+You can use \`docker-compose up -d\` to start a new cluster.`,
     )
   }
   const url = cluster.getApiEndpoint(
