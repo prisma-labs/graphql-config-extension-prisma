@@ -357,9 +357,9 @@ prisma-json-schema@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.4.tgz#4ecee29c351e382fb833dad83a38c62961380458"
 
-prisma-yml@1.0.47:
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.47.tgz#e7ae47eaf6c53a690471eec4d1edabea63386c06"
+prisma-yml@1.0.50:
+  version "1.0.50"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.50.tgz#c85de8fa55efc6cac59083496bc038278be04076"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
