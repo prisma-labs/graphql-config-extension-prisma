@@ -8,6 +8,7 @@ import { PrismaDefinitionClass, Environment } from 'prisma-yml'
 import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
+import * as fs from 'fs'
 
 export async function patchEndpointsToConfig<
   T extends GraphQLConfig | GraphQLProjectConfig
@@ -71,6 +72,69 @@ export async function patchEndpointsToConfigData(
   }
 
   return newConfig
+}
+
+export async function makeConfigFromPath(
+  cwd: string = process.cwd(),
+  envVars?: { [key: string]: any },
+): Promise<GraphQLConfig | null> {
+  const ymlPath = path.join(cwd, 'prisma.yml')
+  if (!fs.existsSync(ymlPath)) {
+    return null
+  }
+
+  const home = os.homedir()
+  const env = new Environment(home)
+  await env.load({})
+
+  const definition = new PrismaDefinitionClass(env, ymlPath, envVars)
+  await definition.load({})
+  const serviceName = definition.service!
+  const stage = definition.stage!
+  const clusterName = definition.cluster
+  if (!clusterName) {
+    throw new Error(
+      `No cluster set. Please set the "cluster" property in your prisma.yml`,
+    )
+  }
+  const cluster = definition.getCluster()
+  if (!cluster) {
+    throw new Error(
+      `Cluster ${clusterName} provided in prisma.yml could not be found in global ~/.prisma/config.yml.
+Please check in ~/.prisma/config.yml, if the cluster exists.
+You can use \`docker-compose up -d\` to start a new cluster.`,
+    )
+  }
+  const url = cluster.getApiEndpoint(
+    serviceName,
+    stage,
+    definition.getWorkspace() || undefined,
+  )
+  const token = definition.getToken(serviceName, stage)
+  const headers = token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : undefined
+
+  const data = {
+    schemaPath: '',
+    projects: {
+      [serviceName]: {
+        schemaPath: '',
+        extensions: {
+          endpoints: {
+            [stage]: {
+              url,
+              headers,
+            },
+          },
+        },
+      },
+    },
+  }
+
+  return new GraphQLConfig(data, '')
 }
 
 async function getEndpointsFromPath(
