@@ -41,7 +41,7 @@ function patchDirectivesToConfigData(
   
   const newConfig = { ...config }
 
-  if (newConfig.extensions && newConfig.extensions.prisma) {
+  if (newConfig.extensions) {
     set(
       newConfig,
       ['extensions', 'customDirectives'],
@@ -52,7 +52,7 @@ function patchDirectivesToConfigData(
   if (newConfig.projects) {
     Object.keys(newConfig.projects).map(projectName => {
       const project = newConfig.projects![projectName]
-      if (project.extensions && project.extensions.prisma) {
+      if (project.extensions) {
         set(
           newConfig,
           ['projects', projectName, 'extensions', 'customDirectives'],
