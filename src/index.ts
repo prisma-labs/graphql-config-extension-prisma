@@ -10,6 +10,79 @@ import * as os from 'os'
 import * as path from 'path'
 import * as fs from 'fs'
 
+export async function patchConfig<
+T extends GraphQLConfig | GraphQLProjectConfig
+>(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
+  config = await patchEndpointsToConfig(config, cwd, envVars)
+  config = patchDirectivesToConfig(config, cwd, envVars)
+  return config
+}
+
+function patchDirectivesToConfig<
+T extends GraphQLConfig | GraphQLProjectConfig
+>(config: T, cwd?: string, envVars?: { [key: string]: any }): T {
+  config.config = patchDirectivesToConfigData(config.config, cwd, envVars)
+  return config
+}
+
+function patchDirectivesToConfigData(
+  config: GraphQLConfigData,
+  cwd?: string,
+  envVars?: { [key: string]: any },
+): GraphQLConfigData {
+  // return early if no prisma extension found
+  const allExtensions = [
+    config.extensions,
+    ...values(config.projects).map(p => p.extensions),
+  ]
+  if (!allExtensions.some(e => e && e.prisma)) {
+    return config
+  }
+  
+  const newConfig = { ...config }
+
+  if (newConfig.extensions && newConfig.extensions.prisma) {
+    set(
+      newConfig,
+      ['extensions', 'customDirectives'],
+      getCustomDirectives(),
+    )
+  }
+
+  if (newConfig.projects) {
+    Object.keys(newConfig.projects).map(projectName => {
+      const project = newConfig.projects![projectName]
+      if (project.extensions && project.extensions.prisma) {
+        set(
+          newConfig,
+          ['projects', projectName, 'extensions', 'customDirectives'],
+          getCustomDirectives()
+        )
+      }
+    })
+  }
+
+  return newConfig
+}
+
+export function getCustomDirectives(version?: string) {
+  return [
+    'enum DeleteValues { CASCADE SET_NULL }',
+    'directive @default(value: Any!) on FIELD_DEFINITION | SCALAR',
+    'directive @relation(name: String!, onDelete: DeleteValues!) on FIELD_DEFINITION | SCALAR',
+    'directive @unique on FIELD_DEFINITION | SCALAR',
+    'directive @pgRelation(column: String!) on FIELD_DEFINITION | SCALAR',
+    'directive @pgRelationTable(table: String!, relationColumn: String!, targetColumn: String!) on FIELD_DEFINITION | SCALAR',
+    'directive @pgTable(name: String!) on FIELD_DEFINITION | SCALAR',
+    'directive @pgColumn(name: String!) on FIELD_DEFINITION | SCALAR',
+    'directive @pgDefault(value: Any!) on FIELD_DEFINITION | SCALAR'
+  ];
+}
+
+
+// TODO: Deprecate and remove this public API in favor 
+// of patchConfig function in playground and other usages 
+// of this project. 
 export async function patchEndpointsToConfig<
   T extends GraphQLConfig | GraphQLProjectConfig
 >(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
