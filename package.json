@@ -12,6 +12,7 @@
     "prisma-yml": "1.0.50"
   },
   "devDependencies": {
+    "@types/graphql": "^0.13.1",
     "@types/jest": "^23.0.0",
     "@types/node": "9.4.6",
     "graphql": "^0.13.1",
