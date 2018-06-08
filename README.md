@@ -16,11 +16,11 @@ projects:
 ## Usage in Node.js
 
 ```ts
-import { patchEndpointsToConfig } from 'graphql-config-extension-prisma'
+import { patchConfig } from 'graphql-config-extension-prisma'
 import { getGraphQLConfig, GraphQLConfigData } from 'graphql-config'
 
 const config: GraphQLConfigData = getGraphQLConfig().config
-const patchedConfig: GraphQLConfigData = patchEndpointsToConfig(
+const patchedConfig: GraphQLConfigData = patchConfig(
   config,
   process.cwd(),
 )
