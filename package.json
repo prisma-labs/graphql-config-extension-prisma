@@ -22,6 +22,7 @@
   },
   "scripts": {
     "test": "jest",
+    "sync-snapshot": "jest --updateSnapshot",
     "prepare": "npm run build",
     "build": "rm -rf dist && tsc -d"
   },

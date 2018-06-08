@@ -68,14 +68,14 @@ function patchDirectivesToConfigData(
 export function getCustomDirectives(version?: string) {
   return [
     'enum DeleteValues { CASCADE SET_NULL }',
-    'directive @default(value: Any!) on FIELD_DEFINITION | SCALAR',
+    'directive @default(value: String!) on FIELD_DEFINITION | SCALAR',
     'directive @relation(name: String!, onDelete: DeleteValues) on FIELD_DEFINITION | SCALAR',
     'directive @unique on FIELD_DEFINITION | SCALAR',
     'directive @pgRelation(column: String!) on FIELD_DEFINITION | SCALAR',
     'directive @pgRelationTable(table: String!, relationColumn: String!, targetColumn: String!) on FIELD_DEFINITION | SCALAR',
     'directive @pgTable(name: String!) on FIELD_DEFINITION | SCALAR',
     'directive @pgColumn(name: String!) on FIELD_DEFINITION | SCALAR',
-    'directive @pgDefault(value: Any!) on FIELD_DEFINITION | SCALAR'
+    'directive @pgDefault(value: String!) on FIELD_DEFINITION | SCALAR'
   ];
 }
 
