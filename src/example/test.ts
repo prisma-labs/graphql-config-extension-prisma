@@ -1,20 +1,22 @@
-import { patchEndpointsToConfigData } from '../index'
+import { patchConfig } from '../index'
 
-async function run() {
+test('patches endpoints and directives (to all projects if one of them has prisma) to config', async () => {
+  expect.assertions(1);
   const config = {
-    projects: {
-      database: {
-        extensions: {
-          prisma: 'prisma.yml',
-          graphcool: 'graphcool.yml',
+    config: {
+      projects: {
+        app: {
+          extensions: {}
+        },
+        database: {
+          extensions: {
+            prisma: 'prisma.yml',
+            graphcool: 'graphcool.yml',
+          },
         },
       },
-    },
+    }
   } as any
-
-  const newConfig = await patchEndpointsToConfigData(config, process.cwd())
-
-  console.log(JSON.stringify(newConfig, null, 2))
-}
-
-run().catch(e => console.error(e))
+  const newConfig = await patchConfig(config, `${__dirname}`);
+  expect(newConfig).toMatchSnapshot();
+});

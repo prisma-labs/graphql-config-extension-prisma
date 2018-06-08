@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`patches endpoints and directives (to all projects if one of them has prisma) to config 1`] = `
+Object {
+  "config": Object {
+    "projects": Object {
+      "app": Object {
+        "extensions": Object {
+          "customDirectives": Array [
+            "enum DeleteValues { CASCADE SET_NULL }",
+            "directive @default(value: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @relation(name: String!, onDelete: DeleteValues) on FIELD_DEFINITION | SCALAR",
+            "directive @unique on FIELD_DEFINITION | SCALAR",
+            "directive @pgRelation(column: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgRelationTable(table: String!, relationColumn: String!, targetColumn: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgTable(name: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgColumn(name: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgDefault(value: String!) on FIELD_DEFINITION | SCALAR",
+          ],
+        },
+      },
+      "database": Object {
+        "extensions": Object {
+          "customDirectives": Array [
+            "enum DeleteValues { CASCADE SET_NULL }",
+            "directive @default(value: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @relation(name: String!, onDelete: DeleteValues) on FIELD_DEFINITION | SCALAR",
+            "directive @unique on FIELD_DEFINITION | SCALAR",
+            "directive @pgRelation(column: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgRelationTable(table: String!, relationColumn: String!, targetColumn: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgTable(name: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgColumn(name: String!) on FIELD_DEFINITION | SCALAR",
+            "directive @pgDefault(value: String!) on FIELD_DEFINITION | SCALAR",
+          ],
+          "endpoints": Object {
+            "dev": Object {
+              "headers": undefined,
+              "url": "https://eu1.prisma.sh/public-asd/n/dev",
+            },
+          },
+          "graphcool": "graphcool.yml",
+          "prisma": "prisma.yml",
+        },
+      },
+    },
+  },
+}
+`;
