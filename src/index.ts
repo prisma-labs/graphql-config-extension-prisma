@@ -11,7 +11,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 
 export async function patchConfig<
-T extends GraphQLConfig | GraphQLProjectConfig
+  T extends GraphQLConfig | GraphQLProjectConfig
 >(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
   config = await patchEndpointsToConfig(config, cwd, envVars)
   config = patchDirectivesToConfig(config, cwd, envVars)
@@ -19,7 +19,7 @@ T extends GraphQLConfig | GraphQLProjectConfig
 }
 
 function patchDirectivesToConfig<
-T extends GraphQLConfig | GraphQLProjectConfig
+  T extends GraphQLConfig | GraphQLProjectConfig
 >(config: T, cwd?: string, envVars?: { [key: string]: any }): T {
   config.config = patchDirectivesToConfigData(config.config, cwd, envVars)
   return config
@@ -38,15 +38,11 @@ function patchDirectivesToConfigData(
   if (!allExtensions.some(e => e && e.prisma)) {
     return config
   }
-  
+
   const newConfig = { ...config }
 
   if (newConfig.extensions) {
-    set(
-      newConfig,
-      ['extensions', 'customDirectives'],
-      getCustomDirectives(),
-    )
+    set(newConfig, ['extensions', 'customDirectives'], getCustomDirectives())
   }
 
   if (newConfig.projects) {
@@ -56,7 +52,7 @@ function patchDirectivesToConfigData(
         set(
           newConfig,
           ['projects', projectName, 'extensions', 'customDirectives'],
-          getCustomDirectives()
+          getCustomDirectives(),
         )
       }
     })
@@ -75,14 +71,13 @@ export function getCustomDirectives(version?: string) {
     'directive @pgRelationTable(table: String!, relationColumn: String!, targetColumn: String!) on FIELD_DEFINITION | SCALAR',
     'directive @pgTable(name: String!) on FIELD_DEFINITION | SCALAR',
     'directive @pgColumn(name: String!) on FIELD_DEFINITION | SCALAR',
-    'directive @pgDefault(value: String!) on FIELD_DEFINITION | SCALAR'
-  ];
+    'directive @pgDefault(value: String!) on FIELD_DEFINITION | SCALAR',
+  ]
 }
 
-
-// TODO: Deprecate and remove this public API in favor 
-// of patchConfig function in playground and other usages 
-// of this project. 
+// TODO: Deprecate and remove this public API in favor
+// of patchConfig function in playground and other usages
+// of this project.
 export async function patchEndpointsToConfig<
   T extends GraphQLConfig | GraphQLProjectConfig
 >(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
@@ -109,7 +104,7 @@ export async function patchEndpointsToConfigData(
   const home = os.homedir()
 
   const env = new Environment(home)
-  await env.load({})
+  await env.load(true)
 
   if (newConfig.extensions && newConfig.extensions.prisma) {
     set(
@@ -158,7 +153,7 @@ export async function makeConfigFromPath(
 
   const home = os.homedir()
   const env = new Environment(home)
-  await env.load({})
+  await env.load(true)
 
   const definition = new PrismaDefinitionClass(env, ymlPath, envVars)
   await definition.load({})
