@@ -1,6 +1,6 @@
 # graphql-config-extension-prisma
 
-[![CircleCI](https://circleci.com/gh/prismagraphql/graphql-config-extension-prisma.svg?style=shield)](https://circleci.com/gh/prismagraphql/graphql-config-extension-prisma) [![npm version](https://badge.fury.io/js/graphql-config-extension-prisma.svg)](https://badge.fury.io/js/graphql-config-extension-prisma)
+[![CircleCI](https://circleci.com/gh/prisma/graphql-config-extension-prisma.svg?style=shield)](https://circleci.com/gh/prisma/graphql-config-extension-prisma) [![npm version](https://badge.fury.io/js/graphql-config-extension-prisma.svg)](https://badge.fury.io/js/graphql-config-extension-prisma)
 
 Injects endpoints and headers into a GraphQL Config instance based on a given prisma.yml
 
