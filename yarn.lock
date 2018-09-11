@@ -2908,13 +2908,13 @@ pretty-format@^23.5.0:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-prisma-json-schema@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.1.1.tgz#d8fd35848cab1d3e7b567b34b3e27c11a5f817b2"
+prisma-json-schema@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.1.2.tgz#2ad1cad7858d42bb8b32d3a31e9d3d9a7318d2e0"
 
-prisma-yml@1.0.93:
-  version "1.0.93"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.93.tgz#32b27e40fdca901b620d4d09262a00e74ed45df0"
+prisma-yml@1.0.95:
+  version "1.0.95"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.95.tgz#0b025336b068eb029d25fc1357a39994fe26b89f"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -2930,7 +2930,7 @@ prisma-yml@1.0.93:
     json-stable-stringify "^1.0.1"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
-    prisma-json-schema "0.1.1"
+    prisma-json-schema "0.1.2"
     replaceall "^0.1.6"
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
