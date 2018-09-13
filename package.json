@@ -8,18 +8,18 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "graphql-config": "^2.0.1",
-    "prisma-yml": "1.0.95"
+    "graphql-config": "^2.2.0",
+    "prisma-yml": "1.0.97"
   },
   "devDependencies": {
-    "@types/graphql": "^0.13.1",
-    "@types/jest": "^23.0.0",
-    "@types/node": "9.4.6",
-    "graphql": "^0.13.1",
-    "jest": "^23.1.0",
-    "ts-jest": "^22.4.6",
-    "ts-node": "5.0.0",
-    "typescript": "2.7.2"
+    "@types/graphql": "^14.0.0",
+    "@types/jest": "^23.3.2",
+    "@types/node": "10.9.4",
+    "graphql": "^14.0.2",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.1.4",
+    "ts-node": "7.0.1",
+    "typescript": "3.0.3"
   },
   "scripts": {
     "test": "jest",
