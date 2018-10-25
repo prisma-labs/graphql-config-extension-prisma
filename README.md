@@ -28,5 +28,5 @@ const patchedConfig: GraphQLConfigData = patchConfig(
 
 ## Current Usages
 
-This is currently being used in the [graphql-playground-html](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html) and [graphql-playgorund-electron](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-electron).
+This is currently being used in the [graphql-playground-html](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html) and [graphql-playground-electron](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-electron).
 
