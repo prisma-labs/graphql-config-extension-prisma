@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/graphql": "^14.0.0",
     "@types/jest": "^23.3.2",
-    "@types/node": "10.9.4",
+    "@types/node": "10.12.1",
     "graphql": "^14.0.2",
     "jest": "^23.6.0",
     "ts-jest": "^23.1.4",
