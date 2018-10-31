@@ -80,8 +80,18 @@ export function getCustomDirectives(version?: string) {
 // of this project.
 export async function patchEndpointsToConfig<
   T extends GraphQLConfig | GraphQLProjectConfig
->(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
-  config.config = await patchEndpointsToConfigData(config.config, cwd, envVars)
+>(
+  config: T,
+  cwd?: string,
+  envVars?: { [key: string]: any },
+  graceful?: boolean,
+): Promise<T> {
+  config.config = await patchEndpointsToConfigData(
+    config.config,
+    cwd,
+    envVars,
+    graceful,
+  )
   return config
 }
 
@@ -89,6 +99,7 @@ export async function patchEndpointsToConfigData(
   config: GraphQLConfigData,
   cwd?: string,
   envVars?: { [key: string]: any },
+  graceful?: boolean,
 ): Promise<GraphQLConfigData> {
   // return early if no prisma extension found
   const allExtensions = [
@@ -115,6 +126,7 @@ export async function patchEndpointsToConfigData(
         newConfig.extensions.prisma,
         cwd,
         envVars,
+        graceful,
       ),
     )
   }
@@ -132,6 +144,7 @@ export async function patchEndpointsToConfigData(
               project.extensions.prisma,
               cwd,
               envVars,
+              graceful,
             ),
           )
         }
@@ -210,10 +223,11 @@ async function getEndpointsFromPath(
   ymlPath: string,
   cwd?: string,
   envVars?: { [key: string]: any },
+  graceful?: boolean,
 ): Promise<GraphQLConfigEnpointsData> {
   const joinedYmlPath = cwd ? path.join(cwd, ymlPath) : ymlPath
   const definition = new PrismaDefinitionClass(env, joinedYmlPath, envVars)
-  await definition.load({})
+  await definition.load({}, undefined, graceful)
   const serviceName = definition.service!
   const stage = definition.stage!
   const clusterName = definition.cluster
