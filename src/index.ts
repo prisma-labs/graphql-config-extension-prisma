@@ -1,26 +1,25 @@
-import {
-  GraphQLConfig,
-  GraphQLConfigData,
-  GraphQLConfigEnpointsData,
-  GraphQLProjectConfig,
-} from 'graphql-config'
+import { GraphQLConfig, GraphQLConfigData, GraphQLConfigEnpointsData, GraphQLProjectConfig } from 'graphql-config'
 import { PrismaDefinitionClass, Environment } from 'prisma-yml'
 import { set, values } from 'lodash'
 import * as os from 'os'
 import * as path from 'path'
 import * as fs from 'fs'
 
-export async function patchConfig<
-  T extends GraphQLConfig | GraphQLProjectConfig
->(config: T, cwd?: string, envVars?: { [key: string]: any }): Promise<T> {
+export async function patchConfig<T extends GraphQLConfig | GraphQLProjectConfig>(
+  config: T,
+  cwd?: string,
+  envVars?: { [key: string]: any },
+): Promise<T> {
   config = await patchEndpointsToConfig(config, cwd, envVars)
   config = patchDirectivesToConfig(config, cwd, envVars)
   return config
 }
 
-function patchDirectivesToConfig<
-  T extends GraphQLConfig | GraphQLProjectConfig
->(config: T, cwd?: string, envVars?: { [key: string]: any }): T {
+function patchDirectivesToConfig<T extends GraphQLConfig | GraphQLProjectConfig>(
+  config: T,
+  cwd?: string,
+  envVars?: { [key: string]: any },
+): T {
   config.config = patchDirectivesToConfigData(config.config, cwd, envVars)
   return config
 }
@@ -31,10 +30,7 @@ function patchDirectivesToConfigData(
   envVars?: { [key: string]: any },
 ): GraphQLConfigData {
   // return early if no prisma extension found
-  const allExtensions = [
-    config.extensions,
-    ...values(config.projects).map(p => p.extensions),
-  ]
+  const allExtensions = [config.extensions, ...values(config.projects).map(p => p.extensions)]
   if (!allExtensions.some(e => e && e.prisma)) {
     return config
   }
@@ -49,11 +45,7 @@ function patchDirectivesToConfigData(
     Object.keys(newConfig.projects).map(projectName => {
       const project = newConfig.projects![projectName]
       if (project.extensions) {
-        set(
-          newConfig,
-          ['projects', projectName, 'extensions', 'customDirectives'],
-          getCustomDirectives(),
-        )
+        set(newConfig, ['projects', projectName, 'extensions', 'customDirectives'], getCustomDirectives())
       }
     })
   }
@@ -78,20 +70,13 @@ export function getCustomDirectives(version?: string) {
 // TODO: Deprecate and remove this public API in favor
 // of patchConfig function in playground and other usages
 // of this project.
-export async function patchEndpointsToConfig<
-  T extends GraphQLConfig | GraphQLProjectConfig
->(
+export async function patchEndpointsToConfig<T extends GraphQLConfig | GraphQLProjectConfig>(
   config: T,
   cwd?: string,
   envVars?: { [key: string]: any },
   graceful?: boolean,
 ): Promise<T> {
-  config.config = await patchEndpointsToConfigData(
-    config.config,
-    cwd,
-    envVars,
-    graceful,
-  )
+  config.config = await patchEndpointsToConfigData(config.config, cwd, envVars, graceful)
   return config
 }
 
@@ -102,10 +87,7 @@ export async function patchEndpointsToConfigData(
   graceful?: boolean,
 ): Promise<GraphQLConfigData> {
   // return early if no prisma extension found
-  const allExtensions = [
-    config.extensions,
-    ...values(config.projects).map(p => p.extensions),
-  ]
+  const allExtensions = [config.extensions, ...values(config.projects).map(p => p.extensions)]
   if (!allExtensions.some(e => e && e.prisma)) {
     return config
   }
@@ -115,19 +97,13 @@ export async function patchEndpointsToConfigData(
   const home = os.homedir()
 
   const env = new Environment(home)
-  await env.load(true)
+  await env.load()
 
   if (newConfig.extensions && newConfig.extensions.prisma) {
     set(
       newConfig,
       ['extensions', 'endpoints'],
-      await getEndpointsFromPath(
-        env,
-        newConfig.extensions.prisma,
-        cwd,
-        envVars,
-        graceful,
-      ),
+      await getEndpointsFromPath(env, newConfig.extensions.prisma, cwd, envVars, graceful),
     )
   }
 
@@ -139,13 +115,7 @@ export async function patchEndpointsToConfigData(
           set(
             newConfig,
             ['projects', projectName, 'extensions', 'endpoints'],
-            await getEndpointsFromPath(
-              env,
-              project.extensions.prisma,
-              cwd,
-              envVars,
-              graceful,
-            ),
+            await getEndpointsFromPath(env, project.extensions.prisma, cwd, envVars, graceful),
           )
         }
       }),
@@ -166,7 +136,7 @@ export async function makeConfigFromPath(
 
   const home = os.homedir()
   const env = new Environment(home)
-  await env.load(true)
+  await env.load()
 
   const definition = new PrismaDefinitionClass(env, ymlPath, envVars)
   await definition.load({})
@@ -174,11 +144,9 @@ export async function makeConfigFromPath(
   const stage = definition.stage!
   const clusterName = definition.cluster
   if (!clusterName) {
-    throw new Error(
-      `No cluster set. Please set the "cluster" property in your prisma.yml`,
-    )
+    throw new Error(`No cluster set. Please set the "cluster" property in your prisma.yml`)
   }
-  const cluster = definition.getCluster()
+  const cluster = await definition.getCluster()
   if (!cluster) {
     throw new Error(
       `Cluster ${clusterName} provided in prisma.yml could not be found in global ~/.prisma/config.yml.
@@ -186,11 +154,7 @@ Please check in ~/.prisma/config.yml, if the cluster exists.
 You can use \`docker-compose up -d\` to start a new cluster.`,
     )
   }
-  const url = cluster.getApiEndpoint(
-    serviceName,
-    stage,
-    definition.getWorkspace() || undefined,
-  )
+  const url = cluster.getApiEndpoint(serviceName, stage, definition.getWorkspace() || undefined)
   const token = definition.getToken(serviceName, stage)
   const headers = token
     ? {
@@ -232,11 +196,9 @@ async function getEndpointsFromPath(
   const stage = definition.stage!
   const clusterName = definition.cluster
   if (!clusterName) {
-    throw new Error(
-      `No cluster set. Please set the "cluster" property in your prisma.yml`,
-    )
+    throw new Error(`No cluster set. Please set the "cluster" property in your prisma.yml`)
   }
-  const cluster = definition.getCluster()
+  const cluster = await definition.getCluster()
   if (!cluster) {
     throw new Error(
       `Cluster ${clusterName} provided in prisma.yml could not be found in global ~/.prisma/config.yml.
@@ -244,11 +206,7 @@ Please check in ~/.prisma/config.yml, if the cluster exists.
 You can use \`docker-compose up -d\` to start a new cluster.`,
     )
   }
-  const url = cluster.getApiEndpoint(
-    serviceName,
-    stage,
-    definition.getWorkspace() || undefined,
-  )
+  const url = cluster.getApiEndpoint(serviceName, stage, definition.getWorkspace() || undefined)
   const token = definition.getToken(serviceName, stage)
   const headers = token
     ? {
